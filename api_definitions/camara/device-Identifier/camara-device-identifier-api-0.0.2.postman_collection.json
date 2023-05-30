@@ -1,0 +1,525 @@
+{
+	"info": {
+		"_postman_id": "c17ceece-46a3-4da6-aeee-62279036ec3f",
+		"name": "camara-device-identifier-api-0.0.2",
+		"description": "The Device Identifier API return details about the device (i.e. UE) currently being used by a specified mobile subscriber. The following information can be returned:\n- A unique network identifier for the specific device itself (IMEI SV and IMEI)\n- A network identifier for the device make and model (IMEI Type Allocation Code)\n- Device manufacturer name\n- Device manufacturer model\n\nInformation for the manufacturer name and model will, where provided, be taken from the [GSMA IMEI database](https://www.gsma.com/aboutus/workinggroups/terminal-steering-group/imei-database)\n\n\nContact Support:\n Email: sp-dvi@lists.camaraproject.org",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27580305",
+		"_collection_link": "https://architectonic-hispam-team.postman.co/workspace/architectonic-hispam-team-works~8ec6c1f1-ed49-4f91-be82-2c643a48544a/collection/27580305-c17ceece-46a3-4da6-aeee-62279036ec3f?action=share&creator=27580305&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "device-identifier",
+			"item": [
+				{
+					"name": "Get details about the device being used by a specified mobile subscriber",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessTokenUrl",
+									"value": "{tokenUrl}",
+									"type": "string"
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"description": "3GPP network access identifier for the subscription being used by the device",
+								"key": "Network-Access-Identifier",
+								"value": "<email>"
+							},
+							{
+								"description": "MSISDN in E.164 format (starting with country code) of the mobile subscription being used by the device. Optionally prefixed with '+'.",
+								"key": "MSISDN",
+								"value": "+71482"
+							},
+							{
+								"description": "The public IP allocated to the device. If an IPv4 address is specified, the public port must also be specified in the \"Port\" header",
+								"key": "IP-Address",
+								"value": "38.196.215.1"
+							},
+							{
+								"description": "The public port alloacted to the device. This is only required if an IPv4 public IP is also specified.",
+								"key": "Port",
+								"value": "<integer>"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/dvi/v0/device-identifier",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dvi",
+								"v0",
+								"device-identifier"
+							]
+						},
+						"description": "Get details about the device being used by a specified mobile subscriber"
+					},
+					"response": [
+						{
+							"name": "OK",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "3GPP network access identifier for the subscription being used by the device",
+										"key": "Network-Access-Identifier",
+										"value": "<email>",
+										"disabled": true
+									},
+									{
+										"description": "MSISDN in E.164 format (starting with country code) of the mobile subscription being used by the device. Optionally prefixed with '+'.",
+										"key": "MSISDN",
+										"value": "441234567890"
+									},
+									{
+										"description": "The public IP allocated to the device. If an IPv4 address is specified, the public port must also be specified in the \"Port\" header",
+										"key": "IP-Address",
+										"value": "38.196.215.1",
+										"disabled": true
+									},
+									{
+										"description": "The public port alloacted to the device. This is only required if an IPv4 public IP is also specified.",
+										"key": "Port",
+										"value": "<integer>",
+										"disabled": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: oauth2",
+										"key": "Authorization",
+										"value": "Bearer MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI3"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/dvi/v0/device-identifier",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dvi",
+										"v0",
+										"device-identifier"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"imeisv\": \"49015420323751800\",\n  \"imei\": \"4901542032375181\",\n  \"tac\": \"49015420\",\n  \"model\": \"3110\",\n  \"manufacturer\": \"Nokia\"\n}"
+						},
+						{
+							"name": "Internal Server Error",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "3GPP network access identifier for the subscription being used by the device",
+										"key": "Network-Access-Identifier",
+										"value": "<email>",
+										"disabled": true
+									},
+									{
+										"description": "MSISDN in E.164 format (starting with country code) of the mobile subscription being used by the device. Optionally prefixed with '+'.",
+										"key": "MSISDN",
+										"value": "441234567222"
+									},
+									{
+										"description": "The public IP allocated to the device. If an IPv4 address is specified, the public port must also be specified in the \"Port\" header",
+										"key": "IP-Address",
+										"value": "38.196.215.1",
+										"disabled": true
+									},
+									{
+										"description": "The public port alloacted to the device. This is only required if an IPv4 public IP is also specified.",
+										"key": "Port",
+										"value": "<integer>",
+										"disabled": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: oauth2",
+										"key": "Authorization",
+										"value": "Bearer MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI3"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/dvi/v0/device-identifier",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dvi",
+										"v0",
+										"device-identifier"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"code\": \"INTERNAL\",\n  \"status\": \"500\",\n  \"message\": \"The service is currently not available\"\n}"
+						},
+						{
+							"name": "Not Found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "3GPP network access identifier for the subscription being used by the device",
+										"key": "Network-Access-Identifier",
+										"value": "<email>",
+										"disabled": true
+									},
+									{
+										"description": "MSISDN in E.164 format (starting with country code) of the mobile subscription being used by the device. Optionally prefixed with '+'.",
+										"key": "MSISDN",
+										"value": "441234567111"
+									},
+									{
+										"description": "The public IP allocated to the device. If an IPv4 address is specified, the public port must also be specified in the \"Port\" header",
+										"key": "IP-Address",
+										"value": "38.196.215.1",
+										"disabled": true
+									},
+									{
+										"description": "The public port alloacted to the device. This is only required if an IPv4 public IP is also specified.",
+										"key": "Port",
+										"value": "<integer>",
+										"disabled": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: oauth2",
+										"key": "Authorization",
+										"value": "Bearer MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI3"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/dvi/v0/device-identifier",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dvi",
+										"v0",
+										"device-identifier"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"code\": \"NOT_FOUND\",\n  \"status\": \"404\",\n  \"message\": \"No device found for the specified parameters\"\n}"
+						},
+						{
+							"name": "Bad Request_INVALID_ARGUMENT",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "3GPP network access identifier for the subscription being used by the device",
+										"key": "Network-Access-Identifier",
+										"value": "<email>",
+										"disabled": true
+									},
+									{
+										"description": "MSISDN in E.164 format (starting with country code) of the mobile subscription being used by the device. Optionally prefixed with '+'.",
+										"key": "MSISDN",
+										"value": "+71482",
+										"disabled": true
+									},
+									{
+										"description": "The public IP allocated to the device. If an IPv4 address is specified, the public port must also be specified in the \"Port\" header",
+										"key": "IP-Address",
+										"value": "38.196.215.2"
+									},
+									{
+										"description": "The public port alloacted to the device. This is only required if an IPv4 public IP is also specified.",
+										"key": "Port",
+										"value": "<integer>",
+										"disabled": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: oauth2",
+										"key": "Authorization",
+										"value": "Bearer MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI3"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/dvi/v0/device-identifier",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dvi",
+										"v0",
+										"device-identifier"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"code\": \"INVALID_ARGUMENT\",\n  \"status\": \"400\",\n  \"message\": \"Insufficient Headers: Port header must be specified if IP is an IPv4 address\"\n}"
+						},
+						{
+							"name": "Bad Request_OUT_OF_RANGE",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "3GPP network access identifier for the subscription being used by the device",
+										"key": "Network-Access-Identifier",
+										"value": "<email>",
+										"disabled": true
+									},
+									{
+										"description": "MSISDN in E.164 format (starting with country code) of the mobile subscription being used by the device. Optionally prefixed with '+'.",
+										"key": "MSISDN",
+										"value": "+71482",
+										"disabled": true
+									},
+									{
+										"description": "The public IP allocated to the device. If an IPv4 address is specified, the public port must also be specified in the \"Port\" header",
+										"key": "IP-Address",
+										"value": "38.196.215.1"
+									},
+									{
+										"description": "The public port alloacted to the device. This is only required if an IPv4 public IP is also specified.",
+										"key": "Port",
+										"value": "65536"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: oauth2",
+										"key": "Authorization",
+										"value": "Bearer MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI3"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/dvi/v0/device-identifier",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dvi",
+										"v0",
+										"device-identifier"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"code\": \"OUT_OF_RANGE\",\n  \"status\": \"400\",\n  \"message\": \"Invalid Header Value: Port\"\n}"
+						},
+						{
+							"name": "Unauthorized",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "3GPP network access identifier for the subscription being used by the device",
+										"key": "Network-Access-Identifier",
+										"value": "<email>",
+										"disabled": true
+									},
+									{
+										"description": "MSISDN in E.164 format (starting with country code) of the mobile subscription being used by the device. Optionally prefixed with '+'.",
+										"key": "MSISDN",
+										"value": "+71482",
+										"disabled": true
+									},
+									{
+										"description": "The public IP allocated to the device. If an IPv4 address is specified, the public port must also be specified in the \"Port\" header",
+										"key": "IP-Address",
+										"value": "38.196.215.1"
+									},
+									{
+										"description": "The public port alloacted to the device. This is only required if an IPv4 public IP is also specified.",
+										"key": "Port",
+										"value": "20000"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: oauth2",
+										"key": "Authorization",
+										"value": "Bearer MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjO5"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/dvi/v0/device-identifier",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dvi",
+										"v0",
+										"device-identifier"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"code\": \"UNAUTHENTICATED\",\n  \"status\": \"401\",\n  \"message\": \"Request not authenticated due to missing, invalid, or expired credentials\"\n}"
+						},
+						{
+							"name": "Forbidden",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Network-Access-Identifier",
+										"value": "spock",
+										"description": "3GPP network access identifier for the subscription being used by the device",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"description": "MSISDN in E.164 format (starting with country code) of the mobile subscription being used by the device. Optionally prefixed with '+'.",
+										"key": "MSISDN",
+										"value": "441234567789"
+									},
+									{
+										"description": "The public IP allocated to the device. If an IPv4 address is specified, the public port must also be specified in the \"Port\" header",
+										"key": "IP-Address",
+										"value": "38.196.215.1",
+										"disabled": true
+									},
+									{
+										"description": "The public port alloacted to the device. This is only required if an IPv4 public IP is also specified.",
+										"key": "Port",
+										"value": "20000",
+										"disabled": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: oauth2",
+										"key": "Authorization",
+										"value": "Bearer MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI3"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/dvi/v0/device-identifier",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dvi",
+										"v0",
+										"device-identifier"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"code\": \"PERMISSION_DENIED\",\n  \"status\": \"403\",\n  \"message\": \"Client does not have sufficient permissions to perform this action\"\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "apiRoot",
+			"value": "https://localhost:443"
+		},
+		{
+			"key": "basePath",
+			"value": "dvi/v0"
+		},
+		{
+			"key": "baseUrl",
+			"value": "{{apiRoot}}/{{basePath}}"
+		}
+	]
+}

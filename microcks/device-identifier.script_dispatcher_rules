@@ -1,0 +1,67 @@
+def MsisdnHeader = mockRequest.getRequest().getHeader("MSISDN")
+def AuthorizationHeader = mockRequest.getRequest().getHeader("Authorization")
+def IPAddressHeader = mockRequest.getRequest().getHeader("IP-Address")
+def PortHeader = mockRequest.getRequest().getHeader("Port")
+
+log.info "Naas Sketch Query --- (DVI) --> MSISDN:  " + MsisdnHeader +  ",  Authorization: "  +  AuthorizationHeader +  ", IP-Address:  "  + IPAddressHeader +  ",   Port: "  + PortHeader 
+
+if(AuthorizationHeader!=null && AuthorizationHeader == "Bearer MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI3")
+{
+   
+    if(MsisdnHeader!=null) 
+    {
+	if(MsisdnHeader=="441234567890") 
+	{   
+ 		return "OK"
+ 	}
+    	else
+    	{
+    	
+	    	if(MsisdnHeader=="441234567222") 
+		{   
+	 		return "Internal Server Error"
+	 	}
+    		else
+	    	{   
+	    	
+			if(MsisdnHeader=="441234567789") 
+			{   
+		 		return "Forbidden"
+		 	}
+	    		else
+		    	{   
+		    		return "Not Found"		    		
+		 	}
+	 	}
+ 	}
+    }   
+    else 
+    {   
+    	if(IPAddressHeader!=null) 
+    	{  
+	    	if(PortHeader!=null && PortHeader.isInteger())
+		{   
+			if(PortHeader.toInteger()>=1024 && PortHeader.toInteger()<=65535)
+			{   
+				return "OK"
+	 		}
+	 		else
+		    	{   
+		    		return "Bad Request_OUT_OF_RANGE"
+		 	}
+ 		}
+ 		else
+	    	{   
+	    		return "Bad Request_INVALID_ARGUMENT"
+	 	}
+ 	}
+    	else
+    	{   
+	    	return "Not Found"
+ 	}
+    }	
+}
+else 
+{
+    return "Unauthorized"
+}

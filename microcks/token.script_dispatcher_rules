@@ -1,0 +1,12 @@
+def AuthorizationHeader = mockRequest.getRequest().getHeader("Authorization")
+
+log.info "Naas Sketch Query --- (TOKEN) ---> Authorization: "  +  AuthorizationHeader 
+
+if(AuthorizationHeader!=null && AuthorizationHeader == "Basic Y2VydGlmaWNhY2lvbjpZMlZ5ZEdsbWFXTmhZMmx2Ymw4eU1ERTNNRGd3TkE9PQ==")
+{
+   	return "OK"
+}
+else 
+{
+    return "Unauthorized"
+}
