@@ -40,7 +40,35 @@ docker stop dapr_placement dapr_zipkin dapr_redis
 
 
 ## Run Business Operator Token with Dapr
+cd naas-sketch/services/business-operator-token
+
+npm install
+
 export DAPR_APP_ID=dapr-proxy-microcks
 
-dapr run --app-port 7001 --app-id business-operator-token --app-protocol http --dapr-http-port 3701 -- npm start
+export DAPR_TOKEN_STORE_NAME=tokenstore
+
+dapr run --app-port 7001 --app-id business-operator-token --app-protocol http --dapr-http-port 3701 -- npm start 
+
+
+## Run Business Operator Egress with Dapr
+cd naas-sketch/services/business-operator-egress
+
+export DAPR_APP_ID=business-operator-token
+
+export DAPR_TOKEN_STORE_NAME=tokenstore
+
+export TARGET_PROXY=http://localhost:8080/rest/camara-device-identifier-and-token-api/0.0.1
+
+npm install
+
+dapr run --app-port 5001 --app-id business-operator-egress --app-protocol http --dapr-http-port 3501 -- npm start 
+
+## Add Dapr resources
+
+On Windows, under %UserProfile%\.dapr\components\tokenstore-redis.yaml
+
+On Linux/MacOS, under ~/.dapr/components/tokenstore-redis.yaml
+
+
 

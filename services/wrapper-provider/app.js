@@ -1,5 +1,3 @@
-import http from 'http';
-
 import httpProxy from 'http-proxy';
 
 const APP_PORT = process.env.APP_PORT ?? "6001";

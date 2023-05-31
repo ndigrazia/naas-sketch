@@ -10,7 +10,7 @@
     },
     "dependencies": {
       "@dapr/dapr": "^2.3.0",
-      "http-proxy": "^1.18.1",
+      "express-http-proxy": "^1.6.3",
       "express": "^4.16.4"
     }
   }

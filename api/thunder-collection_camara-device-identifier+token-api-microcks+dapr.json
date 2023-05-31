@@ -1,0 +1,190 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "camara-device-identifier+token-api-microcks+dapr",
+    "dateExported": "2023-05-31T21:54:18.498Z",
+    "version": "1.1",
+    "folders": [
+        {
+            "_id": "456efb27-61d4-4393-8839-91af5489a05f",
+            "name": "device-identifier",
+            "containerId": "",
+            "created": "2023-05-30T13:34:14.457Z",
+            "sortNum": 10000
+        },
+        {
+            "_id": "fa0f79fc-dc08-4ddd-b2a6-fc67c75d73e3",
+            "name": "Authn/Authz",
+            "containerId": "",
+            "created": "2023-05-30T13:34:31.375Z",
+            "sortNum": 20000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "db7bc7c6-2426-4547-8388-6c82c7dee8d7",
+            "colId": "315176eb-3255-4674-a127-15b69c886751",
+            "containerId": "456efb27-61d4-4393-8839-91af5489a05f",
+            "name": "Get details about the device being used by a specified mobile subscriber (wrapper microcks)",
+            "url": "http://localhost:3601/dvi/v0/device-identifier",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-05-30T13:34:14.458Z",
+            "modified": "2023-05-31T19:32:43.805Z",
+            "headers": [
+                {
+                    "name": "Network-Access-Identifier",
+                    "value": "<email>",
+                    "isDisabled": true
+                },
+                {
+                    "name": "MSISDN",
+                    "value": "441234567890"
+                },
+                {
+                    "name": "IP-Address",
+                    "value": "38.196.215.1",
+                    "isDisabled": true
+                },
+                {
+                    "name": "Port",
+                    "value": "20000",
+                    "isDisabled": true
+                },
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                },
+                {
+                    "name": "dapr-app-id",
+                    "value": "dapr-proxy-microcks"
+                }
+            ],
+            "params": [],
+            "auth": {
+                "type": "oauth2",
+                "oauth2": {
+                    "grantType": "client_credentials",
+                    "tokenUrl": "{tokenUrl}",
+                    "clientId": "",
+                    "clientSecret": "",
+                    "clientAuth": "in-header"
+                }
+            },
+            "tests": []
+        },
+        {
+            "_id": "759564a0-44ad-4d10-b30f-08f6f7aeee1e",
+            "colId": "315176eb-3255-4674-a127-15b69c886751",
+            "containerId": "fa0f79fc-dc08-4ddd-b2a6-fc67c75d73e3",
+            "name": "Get token (wrapper microcks)",
+            "url": "http://localhost:3601/oauth2/v1/token",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-05-30T13:34:31.375Z",
+            "modified": "2023-05-31T17:27:30.380Z",
+            "headers": [
+                {
+                    "name": "User-Agent",
+                    "value": "Thunder Client (https://www.thunderclient.com)",
+                    "isDisabled": true
+                },
+                {
+                    "name": "Authorization",
+                    "value": "Basic Y2VydGlmaWNhY2lvbjpZMlZ5ZEdsbWFXTmhZMmx2Ymw4eU1ERTNNRGd3TkE9PQ=="
+                },
+                {
+                    "name": "dapr-app-id",
+                    "value": "dapr-proxy-microcks"
+                }
+            ],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "ddf5ab29-33a3-4829-81d4-c6bdaa77d44c",
+            "colId": "315176eb-3255-4674-a127-15b69c886751",
+            "containerId": "fa0f79fc-dc08-4ddd-b2a6-fc67c75d73e3",
+            "name": "Get token from business-operator-token (Dapr)",
+            "url": "http://localhost:3701/v0/token",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-05-30T19:36:07.375Z",
+            "modified": "2023-05-31T17:21:30.569Z",
+            "headers": [
+                {
+                    "name": "User-Agent",
+                    "value": "Thunder Client (https://www.thunderclient.com)",
+                    "isDisabled": true
+                },
+                {
+                    "name": "dapr-app-id",
+                    "value": "business-operator-token"
+                },
+                {
+                    "name": "naas-app-id",
+                    "value": "app1"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "formencoded",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "key",
+                        "value": "",
+                        "isDisabled": true
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "49c126af-7ea8-4e1d-a8ad-8ec4ab051f6f",
+            "colId": "315176eb-3255-4674-a127-15b69c886751",
+            "containerId": "456efb27-61d4-4393-8839-91af5489a05f",
+            "name": "Get token from business-operator-egress (Dapr)",
+            "url": "http://localhost:5001/dvi/v0/device-identifier",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2023-05-31T17:17:31.574Z",
+            "modified": "2023-05-31T21:49:29.984Z",
+            "headers": [
+                {
+                    "name": "User-Agent",
+                    "value": "Thunder Client (https://www.thunderclient.com)",
+                    "isDisabled": true
+                },
+                {
+                    "name": "dapr-app-id",
+                    "value": "business-operator-egress",
+                    "isDisabled": true
+                },
+                {
+                    "name": "MSISDN",
+                    "value": "441234567890"
+                },
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "formencoded",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "key",
+                        "value": "",
+                        "isDisabled": true
+                    }
+                ]
+            },
+            "auth": {
+                "type": "none"
+            },
+            "tests": []
+        }
+    ]
+}

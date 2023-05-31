@@ -1,45 +1,109 @@
-import { CommunicationProtocolEnum, DaprClient } from "@dapr/dapr"
+import { DaprClient, HttpMethod, CommunicationProtocolEnum } from '@dapr/dapr';
 
-// It may be replaced by http library
-import express from 'express';
+import http from 'http';
 
-import httpProxy from 'http-proxy';
+//import httpProxy from 'http-proxy';
 
-const APP_PORT = process.env.APP_PORT ?? "3000";
+//import proxy from 'express-http-proxy';
 
-// Create a proxy server with custom application logic
-const proxy = httpProxy.createProxyServer({});
+//import express from 'express';
 
-// Create a http server 
-const app = express();
+//import bodyParser from 'body-parser';
 
-// Listen for the `error` event on `proxy`.
-proxy.on('error', function (err, req, res) {
-    res.writeHead(500, {
-      'Content-Type': 'text/plain'
+const APP_PORT = process.env.APP_PORT ?? "5001";
+
+const TARGET_PROXY_HOST = process.env.TARGET_PROXY_HOST ?? "localhost";
+const TARGET_PROXY_PORT = process.env.TARGET_PROXY_PORT ?? "8080";
+const TARGET_PROXY_PATH = process.env.TARGET_PROXY_PATH ?? "/rest/camara-device-identifier-and-token-api/0.0.1";
+
+const DAPR_PROTOCOL = process.env.DAPR_PROTOCOL ?? "http";
+
+const DAPR_HOST = process.env.DAPR_HOST ?? "localhost";
+
+var DAPR_PORT  
+switch (DAPR_PROTOCOL) {
+  case "http": {
+    DAPR_PORT = process.env.DAPR_HTTP_PORT;
+    break;
+  }
+  case "grpc": {
+    DAPR_PORT = process.env.DAPR_GRPC_PORT;
+    break;
+  }
+  default: {
+    DAPR_PORT = 3701;
+  }
+}
+
+const DAPR_APP_ID = process.env.DAPR_APP_ID ?? "business-operator-token";
+
+const DAPR_TOKEN_STORE_NAME = process.env.DAPR_TOKEN_STORE_NAME ?? "tokenstore";
+
+const KEY_HEADER = "app3";
+
+const client = new DaprClient(DAPR_HOST, DAPR_PORT, DAPR_PROTOCOL);
+
+async function save(store, key, object) {
+  
+  const state = [
+    {
+        key: key,
+        value: object
+    }
+  ]
+
+  // Save state into a state store
+  await client.state.save(store, state)
+  
+  console.log(`Saving storeName: ${store}, value: ${JSON.stringify(state)}!`);
+
+}
+
+async function onRequest(req, res) {
+
+  var token = await client.state.get(DAPR_TOKEN_STORE_NAME, KEY_HEADER);
+  console.log("Getting token from store: ", token || undefined);
+
+  if(!token)  {
+    const _options =  {
+      headers : {
+        "naas-app-id": KEY_HEADER
+      }
+    };
+
+    token =  await client.invoker.invoke(DAPR_APP_ID , "/v0/token", HttpMethod.POST, {}, _options);
+    console.log("Getting token from service: ", token);
+
+    if(token) {
+      save(DAPR_TOKEN_STORE_NAME, KEY_HEADER, token);
+    }
+  }
+  
+  const url = TARGET_PROXY_PATH + req.url;
+
+  console.log("Forwarding: " + url);
+  
+  const options = {
+    hostname: TARGET_PROXY_HOST,
+    port: TARGET_PROXY_PORT,
+    path: url,
+    method: req.method,
+    headers: {
+      ...req.headers,
+      'Authorization': `Bearer ${token.message.access_token}`
+    }
+  };
+
+  const proxy = http.request(options, function (r) {
+    res.writeHead(r.statusCode, r.headers);
+    r.pipe(res, {
+      end: true
     });
-   
-    console.log('Error', err);
+  });
 
-    res.end('Something went wrong. And we are reporting a custom error message.');
-});
+  req.pipe(proxy, {
+    end: true
+  });
+}
 
-// To modify the proxy connection before data is sent, you can listen
-// for the 'proxyReq' event. When the event is fired, you will receive
-// the following arguments:
-// (http.ClientRequest proxyReq, http.IncomingMessage req,
-//  http.ServerResponse res, Object options). This mechanism is useful when
-// you need to modify the proxy request before the proxy connection
-// is made to the target.
-proxy.on('proxyReq', function(proxyReq, req, res, options) {
-    proxyReq.setHeader('Authorization', 'Basic ZGVtbzpwQDU1dzByZA=='); // header added
-});
-
-app.get('*', (req, res) => {
-    // You can define here your custom logic to handle the request
-    // and then proxy the request.
-    console.log('Forwarding', req.method, req.url);
-    proxy.web(req, res, { target: `${req.url}` });
-});
-
-app.listen(APP_PORT, () => console.log(`Proxy server started on port ${APP_PORT}!`));
+http.createServer(onRequest).listen(APP_PORT, () => console.log(`Proxy server started on port ${APP_PORT}!`));
