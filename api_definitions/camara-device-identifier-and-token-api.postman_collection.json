@@ -1,11 +1,11 @@
 {
 	"info": {
 		"_postman_id": "c17ceece-46a3-4da6-aeee-62279036ec3f",
-		"name": "camara-device-identifier-api-0.0.2",
+		"name": "camara-device-identifier-and-token-api",
 		"description": "The Device Identifier API return details about the device (i.e. UE) currently being used by a specified mobile subscriber. The following information can be returned:\n- A unique network identifier for the specific device itself (IMEI SV and IMEI)\n- A network identifier for the device make and model (IMEI Type Allocation Code)\n- Device manufacturer name\n- Device manufacturer model\n\nInformation for the manufacturer name and model will, where provided, be taken from the [GSMA IMEI database](https://www.gsma.com/aboutus/workinggroups/terminal-steering-group/imei-database)\n\n\nContact Support:\n Email: sp-dvi@lists.camaraproject.org",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "27580305",
-		"version": "0.0.2",
+		"version": "0.0.1",
 		"_collection_link": "https://architectonic-hispam-team.postman.co/workspace/architectonic-hispam-team-works~8ec6c1f1-ed49-4f91-be82-2c643a48544a/collection/27580305-c17ceece-46a3-4da6-aeee-62279036ec3f?action=share&creator=27580305&source=collection_link"
 	},
 	"item": [
@@ -503,6 +503,123 @@
 							],
 							"cookie": [],
 							"body": "{\n  \"code\": \"PERMISSION_DENIED\",\n  \"status\": \"403\",\n  \"message\": \"Client does not have sufficient permissions to perform this action\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Authn/Authz",
+			"item": [
+				{
+					"name": "Get token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic Y2VydGlmaWNhY2lvbjpZMlZ5ZEdsbWFXTmhZMmx2Ymw4eU1ERTNNRGd3TkE9PQ==",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/oauth2/v1/token",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"oauth2",
+								"v1",
+								"token"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "OK",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Basic Y2VydGlmaWNhY2lvbjpZMlZ5ZEdsbWFXTmhZMmx2Ymw4eU1ERTNNRGd3TkE9PQ==",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/oauth2/v1/token",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"oauth2",
+										"v1",
+										"token"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"access_token\": \"MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI3\",\n    \"token_type\": \"Bearer\",\n    \"expires_in\": 3600,\n    \"refresh_token\": \"IwOGYzYTlmM2YxOTQ5MGE3YmNmMDFkNTVk\",\n    \"scope\": \"create\"\n}"
+						},
+						{
+							"name": "Unauthorized",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Basic Y2VydGlmaWNhY2lvbjpZMlZ5ZEdsbWFXTmhZMmx2Ymw4eU1ERTNNRGd3TkE7UW==",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/oauth2/v1/token",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"oauth2",
+										"v1",
+										"token"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"code\": \"UNAUTHENTICATED\",\n  \"status\": \"401\",\n  \"message\": \"Request not authenticated due to missing, invalid, or expired credentials\"\n}"
 						}
 					]
 				}
