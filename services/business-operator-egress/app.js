@@ -2,23 +2,19 @@ import { DaprClient, HttpMethod, CommunicationProtocolEnum } from '@dapr/dapr';
 
 import http from 'http';
 
-//import httpProxy from 'http-proxy';
-
-//import proxy from 'express-http-proxy';
-
-//import express from 'express';
-
-//import bodyParser from 'body-parser';
-
 const APP_PORT = process.env.APP_PORT ?? "5001";
 
 const TARGET_PROXY_HOST = process.env.TARGET_PROXY_HOST ?? "localhost";
-const TARGET_PROXY_PORT = process.env.TARGET_PROXY_PORT ?? "8080";
-const TARGET_PROXY_PATH = process.env.TARGET_PROXY_PATH ?? "/rest/camara-device-identifier-and-token-api/0.0.1";
+
+const TARGET_PROXY_PORT = process.env.TARGET_PROXY_PORT ?? "3601";
+
+const TARGET_PROXY_PATH = process.env.TARGET_PROXY_PATH ?? "";
 
 const DAPR_PROTOCOL = process.env.DAPR_PROTOCOL ?? "http";
 
 const DAPR_HOST = process.env.DAPR_HOST ?? "localhost";
+
+const KEY_TENANT = process.env.KEY_TENANT ?? "PER";
 
 var DAPR_PORT  
 switch (DAPR_PROTOCOL) {
@@ -38,8 +34,6 @@ switch (DAPR_PROTOCOL) {
 const DAPR_APP_ID = process.env.DAPR_APP_ID ?? "business-operator-token";
 
 const DAPR_TOKEN_STORE_NAME = process.env.DAPR_TOKEN_STORE_NAME ?? "tokenstore";
-
-const KEY_HEADER = "app3";
 
 const client = new DaprClient(DAPR_HOST, DAPR_PORT, DAPR_PROTOCOL);
 
@@ -61,13 +55,13 @@ async function save(store, key, object) {
 
 async function onRequest(req, res) {
 
-  var token = await client.state.get(DAPR_TOKEN_STORE_NAME, KEY_HEADER);
+  var token = await client.state.get(DAPR_TOKEN_STORE_NAME, KEY_TENANT);
   console.log("Getting token from store: ", token || undefined);
 
   if(!token)  {
     const _options =  {
       headers : {
-        "naas-app-id": KEY_HEADER
+        "naas-app-id": KEY_TENANT
       }
     };
 
@@ -75,7 +69,7 @@ async function onRequest(req, res) {
     console.log("Getting token from service: ", token);
 
     if(token) {
-      save(DAPR_TOKEN_STORE_NAME, KEY_HEADER, token);
+      save(DAPR_TOKEN_STORE_NAME, KEY_TENANT, token);
     }
   }
   
@@ -90,6 +84,7 @@ async function onRequest(req, res) {
     method: req.method,
     headers: {
       ...req.headers,
+      'dapr-app-id': 'dapr-proxy-microcks',
       'Authorization': `Bearer ${token.message.access_token}`
     }
   };

@@ -1,0 +1,32 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "nginx",
+    "dateExported": "2023-06-01T19:37:45.089Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "beba4e6e-645a-4db6-8f14-731740d5bde4",
+            "colId": "5fbd2200-3045-4a4b-849f-b796c8ff0450",
+            "containerId": "",
+            "name": "Get details",
+            "url": "localhost:90/dvi/v0/device-identifier",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2023-06-01T17:44:59.868Z",
+            "modified": "2023-06-01T19:33:47.670Z",
+            "headers": [
+                {
+                    "name": "x-tenant",
+                    "value": "PER"
+                },
+                {
+                    "name": "MSISDN",
+                    "value": "441234567890"
+                }
+            ],
+            "params": [],
+            "tests": []
+        }
+    ]
+}

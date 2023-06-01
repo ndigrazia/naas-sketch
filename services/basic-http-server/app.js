@@ -8,7 +8,9 @@ const response = {"message": "Request successfully proxied!"};
 //
 const server = http.createServer(function (req, res) {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.write('Request successfully!' + '\n\n' + JSON.stringify(req.headers, true, 2));
+    res.write('Request successfully!');
+    if(process.env.APP_TAG) res.write('\n\n Tag: ' + process.env.APP_TAG);
+    res.write('\n\n' + JSON.stringify(req.headers, true, 2));
     res.end();
   });
   

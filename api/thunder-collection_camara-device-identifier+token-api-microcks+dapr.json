@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
     "collectionName": "camara-device-identifier+token-api-microcks+dapr",
-    "dateExported": "2023-05-31T21:54:18.498Z",
+    "dateExported": "2023-06-01T19:37:23.051Z",
     "version": "1.1",
     "folders": [
         {
@@ -81,7 +81,7 @@
             "method": "POST",
             "sortNum": 10000,
             "created": "2023-05-30T13:34:31.375Z",
-            "modified": "2023-05-31T17:27:30.380Z",
+            "modified": "2023-06-01T18:47:27.210Z",
             "headers": [
                 {
                     "name": "User-Agent",
@@ -143,12 +143,12 @@
             "_id": "49c126af-7ea8-4e1d-a8ad-8ec4ab051f6f",
             "colId": "315176eb-3255-4674-a127-15b69c886751",
             "containerId": "456efb27-61d4-4393-8839-91af5489a05f",
-            "name": "Get token from business-operator-egress (Dapr)",
-            "url": "http://localhost:5001/dvi/v0/device-identifier",
+            "name": "Get details about the device being used by a specified mobile subscriber (business-operator-egress)",
+            "url": "http://localhost:9010/dvi/v0/device-identifier",
             "method": "GET",
             "sortNum": 20000,
             "created": "2023-05-31T17:17:31.574Z",
-            "modified": "2023-05-31T21:49:29.984Z",
+            "modified": "2023-06-01T19:25:49.157Z",
             "headers": [
                 {
                     "name": "User-Agent",
@@ -157,7 +157,7 @@
                 },
                 {
                     "name": "dapr-app-id",
-                    "value": "business-operator-egress",
+                    "value": "business-operator-egress-peru",
                     "isDisabled": true
                 },
                 {
