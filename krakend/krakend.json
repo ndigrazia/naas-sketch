@@ -1,0 +1,43 @@
+{
+    "version": 3,
+    "timeout": "3000ms",
+    "cache_ttl": "300s",
+    "output_encoding": "json",
+    "name": "API Gateway",
+    "port": 7070,
+    "extra_config": {
+      "auth/basic": {
+        "htpasswd_path": "/etc/krakend/.htpasswd" 
+      }
+    },
+    "endpoints": [
+      {
+        "endpoint": "/dvi/v0/device-identifier",
+        "method": "GET",
+        "output_encoding": "json",
+        "extra_config": {
+          "auth/basic": {}
+        },
+        "input_headers": [
+            "MSISDN",
+            "Authorization",
+            "IP-Address",
+            "Port",
+            "x-tenant",
+            "x-environment",
+            "User-Agent",
+            "Accept"
+        ],
+        "backend": [
+          {
+            "url_pattern": "/dvi/v0/device-identifier",
+            "encoding": "json",
+            "sd": "static",
+            "method": "GET",
+            "host": ["http://localhost:90"],
+            "disable_host_sanitize": false
+          }
+        ]
+      }
+    ]
+  }

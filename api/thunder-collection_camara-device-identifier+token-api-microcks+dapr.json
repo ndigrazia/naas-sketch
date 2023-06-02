@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
     "collectionName": "camara-device-identifier+token-api-microcks+dapr",
-    "dateExported": "2023-06-01T19:37:23.051Z",
+    "dateExported": "2023-06-02T19:00:22.867Z",
     "version": "1.1",
     "folders": [
         {
@@ -29,7 +29,7 @@
             "method": "GET",
             "sortNum": 10000,
             "created": "2023-05-30T13:34:14.458Z",
-            "modified": "2023-05-31T19:32:43.805Z",
+            "modified": "2023-06-02T18:15:48.349Z",
             "headers": [
                 {
                     "name": "Network-Access-Identifier",
@@ -81,7 +81,7 @@
             "method": "POST",
             "sortNum": 10000,
             "created": "2023-05-30T13:34:31.375Z",
-            "modified": "2023-06-01T18:47:27.210Z",
+            "modified": "2023-06-02T18:29:15.566Z",
             "headers": [
                 {
                     "name": "User-Agent",
@@ -109,7 +109,7 @@
             "method": "POST",
             "sortNum": 20000,
             "created": "2023-05-30T19:36:07.375Z",
-            "modified": "2023-05-31T17:21:30.569Z",
+            "modified": "2023-06-02T17:12:33.806Z",
             "headers": [
                 {
                     "name": "User-Agent",
@@ -121,8 +121,8 @@
                     "value": "business-operator-token"
                 },
                 {
-                    "name": "naas-app-id",
-                    "value": "app1"
+                    "name": "x-tenant",
+                    "value": "PER"
                 }
             ],
             "params": [],
@@ -148,7 +148,7 @@
             "method": "GET",
             "sortNum": 20000,
             "created": "2023-05-31T17:17:31.574Z",
-            "modified": "2023-06-01T19:25:49.157Z",
+            "modified": "2023-06-02T18:53:43.829Z",
             "headers": [
                 {
                     "name": "User-Agent",
@@ -167,6 +167,10 @@
                 {
                     "name": "Accept",
                     "value": "application/json"
+                },
+                {
+                    "name": "x-tenant",
+                    "value": "PER"
                 }
             ],
             "params": [],

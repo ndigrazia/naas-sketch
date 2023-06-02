@@ -14,7 +14,19 @@ const DAPR_PROTOCOL = process.env.DAPR_PROTOCOL ?? "http";
 
 const DAPR_HOST = process.env.DAPR_HOST ?? "localhost";
 
-const KEY_TENANT = process.env.KEY_TENANT ?? "PER";
+const INTERNAL = {
+  code : "INTERNAL",
+  status: 500,
+  message: "The service is currently not available"
+}
+
+const ERR_DIRECT_INVOKE = {
+  code : "ERR_DIRECT_INVOKE",
+  status: 404,
+  message: "failed getting the header x-tenant"
+}
+
+var firstTime = true;
 
 var DAPR_PORT  
 switch (DAPR_PROTOCOL) {
@@ -53,29 +65,34 @@ async function save(store, key, object) {
 
 }
 
-async function onRequest(req, res) {
+async function getTokenFromService(headers) {
 
-  var token = await client.state.get(DAPR_TOKEN_STORE_NAME, KEY_TENANT);
-  console.log("Getting token from store: ", token || undefined);
+  const options =  {
+    headers : {
+      ...headers
+    }
+  };
 
-  if(!token)  {
-    const _options =  {
-      headers : {
-        "naas-app-id": KEY_TENANT
-      }
-    };
+  try { 
+    const token =  await client.invoker.invoke(DAPR_APP_ID , "/v0/token", HttpMethod.POST, {}, options);
 
-    token =  await client.invoker.invoke(DAPR_APP_ID , "/v0/token", HttpMethod.POST, {}, _options);
     console.log("Getting token from service: ", token);
 
-    if(token) {
-      save(DAPR_TOKEN_STORE_NAME, KEY_TENANT, token);
-    }
+    return token;
+  }
+  catch (error) {
+    console.log(error);
+    throw error;
   }
   
+}
+
+function invokeProxy(req, res, token) {
+
   const url = TARGET_PROXY_PATH + req.url;
 
   console.log("Forwarding: " + url);
+  console.log("Token: " + token);
   
   const options = {
     hostname: TARGET_PROXY_HOST,
@@ -86,6 +103,7 @@ async function onRequest(req, res) {
       ...req.headers,
       'dapr-app-id': 'dapr-proxy-microcks',
       'Authorization': `Bearer ${token.message.access_token}`
+      //'Authorization': `Bearer MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI3`
     }
   };
 
@@ -99,6 +117,62 @@ async function onRequest(req, res) {
   req.pipe(proxy, {
     end: true
   });
+
+}
+
+function closeConnWithError(type, req, res) {
+
+  res.writeHead(type.status, {'Content-Type': 'application/json'});
+  res.write(JSON.stringify(type));
+  res.end();
+
+}
+
+async function onRequest(req, res) {
+
+  if(!firstTime) {
+
+    var hasError = false;
+    
+    console.log("Headers: " + JSON.stringify(req.headers));
+
+    const KEY_TENANT = req.headers['x-tenant'];
+
+    console.log("x-tenant: " + KEY_TENANT);
+
+    if(!KEY_TENANT)  {
+      closeConnWithError(ERR_DIRECT_INVOKE, req, res);
+      return;
+    }
+
+    var token = await client.state.get(DAPR_TOKEN_STORE_NAME, KEY_TENANT);
+
+    console.log("Getting token from store: ", token || undefined);
+
+    if(!token)  {
+      
+      try {
+          token = await getTokenFromService(req.headers);
+          
+          if(token) {
+            await save(DAPR_TOKEN_STORE_NAME, KEY_TENANT, token);
+          } else {
+            closeConnWithError(INTERNAL, req, res);
+            return;
+          }
+      }
+      catch (error) {
+        closeConnWithError(INTERNAL, req, res);
+        return;
+      }
+    }
+
+    invokeProxy(req, res, token);
+
+  } else {
+     firstTime = false;
+  } 
+
 }
 
 http.createServer(onRequest).listen(APP_PORT, () => console.log(`Proxy server started on port ${APP_PORT}!`));

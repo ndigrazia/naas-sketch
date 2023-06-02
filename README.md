@@ -1,5 +1,6 @@
 # Naas Sketch
 
+It is a scratch environment to verify the functionality of the services.
 
 ## CAMARA Project
 
@@ -76,10 +77,28 @@ On Windows, under %UserProfile%\.dapr\components\tokenstore-redis.yaml
 On Linux/MacOS, under ~/.dapr/components/tokenstore-redis.yaml
 
 
-## Config Interchange Traffic Service (NGINX)
+## Run Interchange Traffic Service (NGINX)
 
 cd naas-sketch
 
-docker run --network="host" --name interchange-traffic-service -v <path>/naas-sketch/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro -d nginx:1.25.0
+docker run --network="host" --name interchange-traffic-service -v $PWD/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro -d nginx:1.25.0
+
+## Stop & remove Interchange Traffic Service
+
+docker stop interchange-traffic-service
 
 docker rm interchange-traffic-service
+
+
+## Run KrakenD API Gateway
+
+cd naas-sketch
+
+docker run --network="host" --name api-gateway -v $PWD/krakend/krakend.json:/etc/krakend/krakend.json:ro -v $PWD/krakend/.htpasswd:/etc/krakend/.htpasswd:ro -d devopsfaith/krakend run --config /etc/krakend/krakend.json
+
+
+## Stop & remove KrakenD API Gateway
+
+docker stop api-gateway
+
+docker rm api-gateway

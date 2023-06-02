@@ -33,7 +33,7 @@ const HTTP_CODE = 500;
 
 const HTTP_MSG = "An unexpected condition has prevented from fulfilling the request.";
 
-const HEADER_APP_ID = "naas-app-id";
+const HEADER_APP_ID = "x-tenant";
 
 const client = new DaprClient(DAPR_HOST, DAPR_PORT, DAPR_PROTOCOL);
 
@@ -53,7 +53,7 @@ app.post('/v0/token', async (_req, _res) => {
     try {
         if(!key)  {
           code = 400;
-          msg = `Failed getting the header ${HEADER_APP_ID}!`;
+          msg = `Failed getting the header ${HEADER_APP_ID} !`;
         }
         else {
           var options =  {
