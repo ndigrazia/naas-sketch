@@ -1,0 +1,172 @@
+version: '3'
+services:
+  ########################################
+  # wrapper-provider app + Dapr sidecar
+  ########################################
+  wrapper-provider:
+    build:
+      context: ../services/wrapper-provider
+      dockerfile: Dockerfile
+    image: wrapper-provider:0.0.6
+    ports:
+      - "3601:3601"
+    depends_on:
+      - redis
+      - placement
+    environment:
+        - "TARGET_PROXY=http://host.docker.internal:8080/rest/camara-device-identifier-and-token-api/0.0.1"
+        - "APP_PORT=6001"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - dapr-network
+  wrapper-provider-dapr:
+    image: "daprio/daprd:edge"
+    command: ["./daprd",
+     "--app-id", "dapr-proxy-microcks",
+     "--app-port", "6001",
+     "--placement-host-address", "placement:50006",
+     "--dapr-http-port", "3601",
+     "--components-path", "/components"]
+    volumes:
+        - "./components/:/components"
+    depends_on:
+      - wrapper-provider
+    network_mode: "service:wrapper-provider"
+  ###############################################
+  # business-operator-token app + Dapr sidecar
+  ###############################################
+  business-operator-token:
+    build:
+      context: ../services/business-operator-token
+      dockerfile: Dockerfile
+    image: business-operator-token:0.0.8
+    ports:
+      - "3701:3701"
+    depends_on:
+      - redis
+      - placement
+    environment:
+        - "DAPR_APP_ID=dapr-proxy-microcks"
+        - "APP_PORT=7001"
+        - "DAPR_TOKEN_STORE_NAME=tokenstore"
+    networks:
+      - dapr-network
+  business-operator-token-dapr:
+    image: "daprio/daprd:edge"
+    command: ["./daprd",
+     "--app-id", "business-operator-token",
+     "--app-port", "7001",
+     "--placement-host-address", "placement:50006",
+     "--dapr-http-port", "3701",
+     "--components-path", "/components"]
+    volumes:
+        - "./components/:/components"
+    depends_on:
+      - business-operator-token
+    network_mode: "service:business-operator-token"
+  ########################################################
+  # business-operator-egress app + Dapr sidecar (PERU)
+  ########################################################
+  business-operator-egress-peru:
+    build:
+      context: ../services/business-operator-egress
+      dockerfile: Dockerfile
+    image: business-operator-egress:0.0.7
+    ports:
+      - "3910:3910"
+     # - "9010:9010"
+    depends_on:
+      - redis
+      - placement
+    environment:
+        - "DAPR_APP_ID=business-operator-token"
+        - "APP_PORT=9010"
+        - "DAPR_TOKEN_STORE_NAME=tokenstore"
+        - "TARGET_PROXY_HOST=wrapper-provider"
+        - "TARGET_PROXY_PORT=3601"
+    networks:
+      - dapr-network
+  business-operator-egress-peru-dapr:
+    image: "daprio/daprd:edge"
+    command: ["./daprd",
+     "--app-id", "business-operator-egress-peru",
+     "--app-port", "9010",
+     "--placement-host-address", "placement:50006",
+     "--dapr-http-port", "3910",
+     "--components-path", "/components"]
+    volumes:
+        - "./components/:/components"
+    depends_on:
+      - business-operator-egress-peru
+    network_mode: "service:business-operator-egress-peru" 
+  ############################
+  # Dapr placement service
+  ############################
+  placement:
+    image: "daprio/dapr:1.10.6"
+    command: ["./placement", "--port", "50006"]
+    ports:
+      - "50006:50006"
+    networks:
+      - dapr-network
+  ############################
+  # Redis state store
+  ############################
+  redis:
+    image: "redis:6"
+    ports:
+      - "6379:6379"
+    networks:
+      - dapr-network
+  ################################
+  # interchange-traffic-service
+  ################################
+  interchange-traffic-service:
+    image: "nginx:1.25.0"
+    ports:
+      - "90:90"
+    networks:
+      - dapr-network
+    volumes:
+      - type: bind
+        source: ./nginx/nginx.conf
+        target: /etc/nginx/conf.d/default.conf
+    depends_on:
+      - business-operator-egress-peru
+      - business-operator-egress-colombia
+  ###############################################
+  # business-operator-egress app  (COLOMBIA)
+  ###############################################
+  business-operator-egress-colombia:
+    build:
+      context: ../services/basic-http-server
+      dockerfile: Dockerfile
+    image: basic-http-server-colombia:0.0.1
+    ports:
+      - "9020:9020"
+    environment:
+        - "APP_PORT=9020"
+    networks:
+      - dapr-network
+  ################################
+  # API GATEWAY
+  ################################
+  api-gateway:
+    image: "devopsfaith/krakend"
+    ports:
+      - "7070:7070"
+    command: ["run", "-d", "-c", "/etc/krakend/krakend.json"]
+    networks:
+      - dapr-network
+    volumes:
+      - type: bind
+        source: ./krakend/krakend.json
+        target: /etc/krakend/krakend.json
+      - type: bind
+        source: ./krakend/.htpasswd
+        target: /etc/krakend/.htpasswd
+    depends_on:
+      - interchange-traffic-service
+networks:
+    dapr-network:

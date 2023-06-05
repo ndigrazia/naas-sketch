@@ -67,7 +67,7 @@ export TARGET_PROXY_PORT=3601
 
 npm install
 
-dapr run --app-port 9010 --app-id business-operator-egress-peru --app-protocol http --dapr-http-port 3910 -- npm start 
+dapr run --app-port 9010 --app-id business-operator-egress --app-protocol http --dapr-http-port 3910 -- npm start 
 
 
 ## Add Dapr resources
@@ -102,3 +102,13 @@ docker run --network="host" --name api-gateway -v $PWD/krakend/krakend.json:/etc
 docker stop api-gateway
 
 docker rm api-gateway
+
+## Start docker compose
+
+cd naas-sketch\docker-compose
+
+docker-compose up -d
+
+## Stop docker compose
+
+docker-compose down

@@ -32,6 +32,8 @@ var DAPR_PORT
 switch (DAPR_PROTOCOL) {
   case "http": {
     DAPR_PORT = process.env.DAPR_HTTP_PORT;
+    if(!DAPR_PORT)
+      DAPR_PORT = 3910;
     break;
   }
   case "grpc": {
@@ -39,7 +41,7 @@ switch (DAPR_PROTOCOL) {
     break;
   }
   default: {
-    DAPR_PORT = 3701;
+    DAPR_PORT = 3910;
   }
 }
 
@@ -48,6 +50,12 @@ const DAPR_APP_ID = process.env.DAPR_APP_ID ?? "business-operator-token";
 const DAPR_TOKEN_STORE_NAME = process.env.DAPR_TOKEN_STORE_NAME ?? "tokenstore";
 
 const client = new DaprClient(DAPR_HOST, DAPR_PORT, DAPR_PROTOCOL);
+console.log("-----------------------------------------------------");
+console.log("business-operator-egress------------------------------");
+console.log(`DaprClient:  Host:${DAPR_HOST}-Port:${DAPR_PORT}-Protocol:${DAPR_PROTOCOL}`);
+console.log("-----------------------------------------------------");
+console.log("-----------------------------------------------------");
+
 
 async function save(store, key, object) {
   
@@ -146,6 +154,7 @@ async function onRequest(req, res) {
     }
 
     var token = await client.state.get(DAPR_TOKEN_STORE_NAME, KEY_TENANT);
+    //var token =  undefined;
 
     console.log("Getting token from store: ", token || undefined);
 

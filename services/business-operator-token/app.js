@@ -14,6 +14,8 @@ var DAPR_PORT
 switch (DAPR_PROTOCOL) {
   case "http": {
     DAPR_PORT = process.env.DAPR_HTTP_PORT;
+    if(!DAPR_PORT)
+      DAPR_PORT = 3701;
     break;
   }
   case "grpc": {
@@ -36,6 +38,11 @@ const HTTP_MSG = "An unexpected condition has prevented from fulfilling the requ
 const HEADER_APP_ID = "x-tenant";
 
 const client = new DaprClient(DAPR_HOST, DAPR_PORT, DAPR_PROTOCOL);
+console.log("-----------------------------------------------------");
+console.log("business-operator-token------------------------------");
+console.log(`DaprClient:  Host:${DAPR_HOST}-Port:${DAPR_PORT}-Protocol:${DAPR_PROTOCOL}`);
+console.log("-----------------------------------------------------");
+console.log("-----------------------------------------------------");
 
 const app = express();
 
