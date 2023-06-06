@@ -46,6 +46,7 @@ services:
     depends_on:
       - redis
       - placement
+      - wrapper-provider-dapr
     environment:
         - "DAPR_APP_ID=dapr-proxy-microcks"
         - "APP_PORT=7001"
@@ -79,6 +80,7 @@ services:
     depends_on:
       - redis
       - placement
+      - business-operator-token
     environment:
         - "DAPR_APP_ID=business-operator-token"
         - "APP_PORT=9010"
@@ -133,7 +135,7 @@ services:
         source: ./nginx/nginx.conf
         target: /etc/nginx/conf.d/default.conf
     depends_on:
-      - business-operator-egress-peru
+      - device-identifier-business-service-peru
       - business-operator-egress-colombia
   ###############################################
   # business-operator-egress app  (COLOMBIA)
@@ -168,5 +170,36 @@ services:
         target: /etc/krakend/.htpasswd
     depends_on:
       - interchange-traffic-service
+  ##############################################################
+  # device-identifier-business-service app + Dapr sidecar (PERU)
+  ##############################################################
+  device-identifier-business-service-peru:
+    build:
+      context: ../services/device-identifier-business-service
+      dockerfile: Dockerfile
+    image: device-identifier-business-service:0.0.4
+    ports:
+      - "3930:3930"
+    depends_on:
+      - placement
+      - business-operator-egress-peru
+    environment:
+        - "DAPR_APP_ID=business-operator-egress-peru"
+        - "APP_PORT=9030"
+    networks:
+      - dapr-network
+  device-identifier-business-service-peru-dapr:
+    image: "daprio/daprd:edge"
+    command: ["./daprd",
+      "--app-id", "device-identifier-business-service-peru",
+      "--app-port", "9030",
+      "--placement-host-address", "placement:50006",
+      "--dapr-http-port", "3930",
+      "--components-path", "/components"]
+    volumes:
+        - "./components/:/components"
+    depends_on:
+      - device-identifier-business-service-peru
+    network_mode: "service:device-identifier-business-service-peru"
 networks:
     dapr-network:
