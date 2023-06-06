@@ -30,7 +30,6 @@ export TARGET_PROXY=http://localhost:8080/rest/camara-device-identifier-and-toke
 
 dapr run --app-port 6001 --app-id dapr-proxy-microcks --app-protocol http --dapr-http-port 3601 -- npm start
 
-
 ## Kill proxy to microcks backend
 
 lsof -i :6001
@@ -41,11 +40,9 @@ kill -9 <PID>
 
 docker start dapr_placement dapr_zipkin dapr_redis
 
-
 ## Stop Dapr services
 
 docker stop dapr_placement dapr_zipkin dapr_redis
-
 
 ## Run Business Operator Token Service with Dapr
 
@@ -58,7 +55,6 @@ export DAPR_APP_ID=dapr-proxy-microcks
 export DAPR_TOKEN_STORE_NAME=tokenstore
 
 dapr run --app-port 7001 --app-id business-operator-token --app-protocol http --dapr-http-port 3701 -- npm start 
-
 
 ## Run Business Operator Egress Service with Dapr
 
@@ -76,13 +72,11 @@ npm install
 
 dapr run --app-port 9010 --app-id business-operator-egress --app-protocol http --dapr-http-port 3910 -- npm start 
 
-
 ## Add Dapr resources
 
 On Windows, under %UserProfile%\.dapr\components\tokenstore-redis.yaml
 
 On Linux/MacOS, under ~/.dapr/components/tokenstore-redis.yaml
-
 
 ## Run Interchange Traffic Service (NGINX)
 
@@ -96,13 +90,11 @@ docker stop interchange-traffic-service
 
 docker rm interchange-traffic-service
 
-
 ## Run KrakenD API Gateway
 
 cd naas-sketch
 
 docker run --network="host" --name api-gateway -v $PWD/krakend/krakend.json:/etc/krakend/krakend.json:ro -v $PWD/krakend/.htpasswd:/etc/krakend/.htpasswd:ro -d devopsfaith/krakend run --config /etc/krakend/krakend.json
-
 
 ## Stop & remove KrakenD API Gateway
 
