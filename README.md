@@ -8,6 +8,13 @@ It is a scratch environment to verify the functionality of the services.
 
 [CAMARA Project](https://github.com/camaraproject)
 
+## Config Microcks
+
+[Start microcks](https://microcks.io/documentation/getting-started/)
+
+Import as a service: /naas-sketch/api/camara-device-identifier-and-token-api.postman_collection.json
+
+Config rules: /naas-sketch/microcks/device-identifier.script_dispatcher_rules & /naas-sketch/microcks/device-identifier.script_dispatcher_rules
 
 ## Run proxy to Microcks Backend with Dapr
 
