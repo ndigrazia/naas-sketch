@@ -5,7 +5,7 @@ services:
   ########################################
   wrapper-provider:
     build:
-      context: ../services/wrapper-provider
+      context: ../../services/wrapper-provider
       dockerfile: Dockerfile
     image: wrapper-provider:0.0.6
     ports:
@@ -38,7 +38,7 @@ services:
   ###############################################
   business-operator-token:
     build:
-      context: ../services/business-operator-token
+      context: ../../services/business-operator-token
       dockerfile: Dockerfile
     image: business-operator-token:0.0.8
     ports:
@@ -71,7 +71,7 @@ services:
   ########################################################
   business-operator-egress-peru:
     build:
-      context: ../services/business-operator-egress
+      context: ../../services/business-operator-egress
       dockerfile: Dockerfile
     image: business-operator-egress:0.0.7
     ports:
@@ -142,7 +142,7 @@ services:
   ###############################################
   business-operator-egress-colombia:
     build:
-      context: ../services/basic-http-server
+      context: ../../services/basic-http-server
       dockerfile: Dockerfile
     image: basic-http-server-colombia:0.0.1
     ports:
@@ -175,7 +175,7 @@ services:
   ##############################################################
   device-identifier-business-service-peru:
     build:
-      context: ../services/device-identifier-business-service
+      context: ../../services/device-identifier-business-service
       dockerfile: Dockerfile
     image: device-identifier-business-service:0.0.4
     ports:
